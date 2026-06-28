@@ -5,6 +5,11 @@
     ./modules/git.nix
     ./modules/vscode.nix
     ./modules/emacs.nix
+    ./modules/sway.nix
+    ./modules/waybar.nix
+    ./modules/foot.nix
+    ./modules/fuzzel.nix
+    ./modules/desktop.nix
   ];
 
   home.username = "will";

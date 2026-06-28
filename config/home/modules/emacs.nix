@@ -1,6 +1,7 @@
 { config, pkgs, ... }: {
   # Install Emacs into the user profile.
-  home.packages = with pkgs; [ emacs ];
+  # emacs-pgtk renders natively on Wayland (pure GTK build).
+  home.packages = with pkgs; [ emacs-pgtk ];
 
   # Link our init.el to ~/.emacs.d/init.el.
   # Emacs prefers ~/.emacs.d over the XDG ~/.config/emacs location whenever

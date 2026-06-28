@@ -43,17 +43,59 @@
     LC_TIME = "en_US.UTF-8";
   };
 
-  # Enable the X11 windowing system.
-  services.xserver.enable = true;
+  # Wayland desktop: Sway compositor.
+  # programs.sway sets up the session wrapper, dbus activation, XWayland and
+  # the polkit integration; the actual sway config lives in home-manager.
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true; # GTK apps behave under sway
+  };
 
-  # Enable the XFCE Desktop Environment.
-  services.xserver.displayManager.lightdm.enable = true;
-  services.xserver.desktopManager.xfce.enable = true;
+  # Login via greetd + tuigreet (minimal TTY greeter that launches sway).
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+      # --remember pre-fills the username field with the last user that
+      # logged in (will), so the greeter lands on the password prompt
+      # instead of asking for a username first.
+      command = "${pkgs.tuigreet}/bin/tuigreet --time --remember --cmd sway";
+      user = "greeter";
+    };
+  };
 
-  # Configure keymap in X11
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
+  # Seed tuigreet's "last user" cache with "will" so the username is pre-filled
+  # to will out of the box -- on a fresh install or after the cache is cleared,
+  # not just after will's first interactive login. The 'f' rule only creates the
+  # file when missing, so tuigreet's own --remember updates still take effect.
+  systemd.tmpfiles.rules = [
+    "d /var/cache/tuigreet 0755 greeter greeter - -"
+    "f /var/cache/tuigreet/lastuser 0644 greeter greeter - will"
+  ];
+
+  # XDG portals: native file dialogs + screen sharing for GTK/Electron/Chromium.
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+
+  # Console keymap (sway handles the Wayland keyboard layout itself).
+  console.keyMap = "us";
+
+  # Make Chromium/Electron apps (Chrome, VSCode, Obsidian) use native Wayland.
+  environment.sessionVariables.NIXOS_OZONE_WL = "1";
+
+  # Removable media auto-mount for Thunar.
+  services.gvfs.enable = true;
+  services.udisks2.enable = true;
+
+  # Fonts: a base font plus an icon font for Waybar glyphs.
+  fonts.packages = with pkgs; [ noto-fonts font-awesome ];
+
+  # Lid close: lock (via swayidle before-sleep) then suspend, on AC or battery.
+  services.logind.settings.Login = {
+    HandleLidSwitch = "suspend";
+    HandleLidSwitchExternalPower = "suspend";
   };
 
   # Enable CUPS to print documents.
@@ -75,14 +117,15 @@
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
+  # Touchpad: sway/libinput handle this natively under Wayland (no config needed
+  # for defaults; tweak via wayland.windowManager.sway input settings if wanted).
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users."will" = {
     isNormalUser = true;
     description = "Will Schetelich";
-    extraGroups = [ "networkmanager" "wheel" ];
+    # video/input: let brightnessctl (via its udev rules) control the backlight.
+    extraGroups = [ "networkmanager" "wheel" "video" "input" ];
     packages = with pkgs; [
     ];
   };
@@ -93,6 +136,11 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    brightnessctl              # backlight control (bound to brightness keys)
+    wl-clipboard               # wl-copy / wl-paste
+    lxqt.lxqt-policykit        # graphical polkit auth agent
+    pavucontrol                # GUI audio mixer
+    networkmanagerapplet       # nm-connection-editor
   #  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
   #  wget
   ];
