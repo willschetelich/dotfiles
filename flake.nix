@@ -10,15 +10,15 @@
   };
 
   outputs = { self, nixpkgs, home-manager, ... }: {
-    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.thinkpad = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
-        ./config/system/system-config.nix
+        ./hosts/thinkpad/configuration.nix
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
-          home-manager.users.will = import ./config/home/home-config.nix;
+          home-manager.users.will = import ./hosts/thinkpad/home.nix;
         }
       ];
     };
