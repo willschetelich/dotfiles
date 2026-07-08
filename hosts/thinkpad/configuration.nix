@@ -98,6 +98,16 @@
     HandleLidSwitchExternalPower = "suspend";
   };
 
+  # Thunderbolt device management (boltd + boltctl). The Thunderbolt security
+  # level defaults to "user", so the TB3 dock must be authorized before it is
+  # fully brought up. macOS authorizes automatically; without bolt nothing does
+  # here, which left the dock at authorized=0 and its second DisplayPort output
+  # dead (only one external monitor lit). bolt remembers the dock and
+  # auto-authorizes it at connect time, so the dock initializes both DP outputs.
+  # After the first rebuild, enroll the dock once so future connects are
+  # automatic:  boltctl enroll --policy auto <uuid>   (uuid from `boltctl list`).
+  services.hardware.bolt.enable = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
