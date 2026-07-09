@@ -18,6 +18,11 @@
 
   programs.home-manager.enable = true;
 
+  xdg.userDirs = {
+    enable = true;
+    createDirectories = false;
+  };
+
   home.packages = with pkgs; [
     claude-code
     google-chrome
