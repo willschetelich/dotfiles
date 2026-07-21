@@ -3,7 +3,6 @@
     ./shell-config.nix
     ./ssh.nix
     ./git.nix
-    ./emacs.nix
     ./sway.nix
     ./waybar.nix
     ./foot.nix

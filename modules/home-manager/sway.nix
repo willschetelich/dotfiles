@@ -6,8 +6,7 @@ let
   # Region screenshot to ~/Pictures with a timestamped name.
   screenshot = ''grim -g "$(slurp)" "$HOME/Pictures/screenshot-$(date +%Y%m%d-%H%M%S).png"'';
 in
-{
-  wayland.windowManager.sway = {
+{  wayland.windowManager.sway = {
     enable = true;
     # Use the system-wide sway from programs.sway (avoids a second wrapped copy).
     package = null;
