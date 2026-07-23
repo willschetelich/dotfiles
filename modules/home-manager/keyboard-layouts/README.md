@@ -6,9 +6,9 @@
 
 ```bash
 nix develop
-# Plug in left side
-qmk flash -kb svalboard/trackpoint/left -km SiriusStarr
-# Plug in right side
+# Plug in left side (trackball, configured as scroll in keymap)
+qmk flash -kb svalboard/trackball/pmw3389/left -km SiriusStarr
+# Plug in right side (trackball, configured as pointer in keymap)
 qmk flash -kb svalboard/trackball/pmw3389/right -km SiriusStarr
 ```
 

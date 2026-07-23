@@ -2,8 +2,6 @@ VIA_ENABLE = no
 VIAL_ENABLE = no
 VIAL_INSECURE = no
 
-
-# --- merged from users/SiriusStarr/rules.mk; VPATH/$(USER_PATH) paths still need fixing (deferred) ---
 # QMK software features
 
 LEADER_ENABLE = no       # Enable the Leader Key feature
@@ -26,8 +24,6 @@ COMBO_ENABLE = yes       # chording
 
 # For the combo macros in keymap_combos.h
 VPATH += keyboards/gboards/g
-VPATH += $(USER_PATH)/defs
-VPATH += $(USER_PATH)/extensions
 # For keymap_support.c
 VPATH += keyboards/svalboard/keymaps
 

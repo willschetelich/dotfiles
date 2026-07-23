@@ -10,6 +10,7 @@
     ./fuzzel.nix
     ./gammastep.nix
     ./desktop.nix
+    ./qmk.nix
   ];
 
   home.username = "will";
