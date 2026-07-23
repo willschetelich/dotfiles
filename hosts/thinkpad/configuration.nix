@@ -34,6 +34,15 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  # Static IP for the wired ethernet interface. NixOS automatically marks
+  # statically-configured interfaces as unmanaged by NetworkManager.
+  networking.interfaces.enp0s31f6.ipv4.addresses = [{
+    address = "10.0.0.3";
+    prefixLength = 24;
+  }];
+  networking.defaultGateway = "10.0.0.1";
+  networking.nameservers = [ "10.0.0.1" "1.1.1.1" ];
+
   # Set your time zone.
   time.timeZone = "America/New_York";
 
