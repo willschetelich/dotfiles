@@ -16,6 +16,15 @@
 
   networking.hostName = "thinkpad"; # Define your hostname.
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  # nix-ld provides a loader (/lib64/ld-linux-x86-64.so.2) so generic,
+  # dynamically-linked Linux binaries can run on NixOS. The VSCode Claude Code
+  # extension ships its own prebuilt `claude` binary (resources/native-binary/
+  # claude) and runs that instead of the patched nixpkgs CLI on PATH; without
+  # nix-ld it fails with "Could not start dynamically linked executable"
+  # (exit 127). See https://nix.dev/permalink/stub-ld
+  programs.nix-ld.enable = true;
+
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
