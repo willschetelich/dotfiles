@@ -6,7 +6,6 @@
     ./sway.nix
     ./waybar.nix
     ./foot.nix
-    ./micro.nix
     ./fuzzel.nix
     ./gammastep.nix
     ./desktop.nix
