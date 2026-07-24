@@ -34,8 +34,10 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
-  # Static IP for the wired ethernet interface. NixOS automatically marks
-  # statically-configured interfaces as unmanaged by NetworkManager.
+  # Static IP for the wired ethernet interface. NetworkManager must be told to
+  # leave this interface alone, otherwise it keeps DHCP-ing and clears the
+  # static address set below.
+  networking.networkmanager.unmanaged = [ "enp0s31f6" ];
   networking.interfaces.enp0s31f6.ipv4.addresses = [{
     address = "10.0.0.3";
     prefixLength = 24;
