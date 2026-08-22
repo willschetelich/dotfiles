@@ -28,13 +28,14 @@ Upstream's Atreus and Kaleidoscope material is deliberately not vendored.
 
 ## Deviations from upstream
 
-**Three, all in `process_record.c`, all in the pointing path.** Verified against upstream
-`6ea14f9`: 25 of the 28 source files are byte-identical, and the only other differences
-are the two `rules.mk` merged into one (see Provenance above — behaviorally identical,
-differing solely by two dead `VPATH` lines).
+**Four: three in `process_record.c`, one in `layout.h` — all in the pointing path.**
+Verified against upstream `6ea14f9`: 24 of the 28 source files are byte-identical, and
+the only other differences are the two `rules.mk` merged into one (see Provenance above —
+behaviorally identical, differing solely by two dead `VPATH` lines).
 
-Typing is bit-for-bit SiriusStarr's: keymap, layers, home-row mods, Achordion, combos,
-adaptive keys, custom shifts, macros, select-word, sentence-case, caps-word, keylogger.
+Typing is bit-for-bit SiriusStarr's: layers, home-row mods, Achordion, combos, adaptive
+keys, custom shifts, macros, select-word, sentence-case, caps-word, keylogger. Only the
+MOUSE layer differs, and only in its two horizontal-wheel keys (deviation 4).
 
 ### 1. DPI is pushed to the sensors — a bug fix, do not remove
 
@@ -93,6 +94,25 @@ Two limits, both inherent:
 * It cannot affect typing. It runs *after* `pointing_device_task_combined_user()`, which
   has already called `mouse_mode(true)`.
 
+### 4. MOUSE-layer horizontal wheel keys blanked — `layout.h`
+
+```c
+#define L_4_B_MOUSE XXXXXXX  // upstream: KC_MS_WH_LEFT
+#define L_1_B_MOUSE XXXXXXX  // upstream: KC_MS_WH_RIGHT
+```
+
+Left hand, bottom row, pinky and index on the MOUSE layer. The companion to deviation 3,
+and **required for it**: deviation 3 alone does not stop horizontal scroll, because these
+two keys never pass through the pointing-device report at all.
+
+Mousekey keycodes are assembled in `mousekey_get_report()` and sent as their own HID
+report. `pointing_device_task()` merges only `buttons` from that report into the pointing
+report (`pointing_device.c:369`) — never `h` or `v`. So `r.h = 0` in
+`pointing_device_task_combined_kb()` is downstream of the trackball and upstream of
+nothing these keys touch. They kept scrolling sideways after deviation 3 shipped.
+
+`L_3_B_MOUSE` / `L_2_B_MOUSE` (wheel up/down) are untouched — vertical wheel still works.
+
 ## Not deviations — do not "fix" these
 
 * **`VIAL_ENABLE = no` in `rules.mk`.** `qmk info` flags it as a stale option (a ☒ lint,
@@ -141,7 +161,7 @@ Scroll *feel* will not match upstream — a trackpoint scrolls through PS/2 with
 divisor, a pmw3389 scrolls through `axis_scale.c` at a DPI-governed rate, so the left DPI
 index governs scroll speed. Retune by editing `left_dpi_index`, NOT with the DPI up/down
 keys — see deviation 1, `keyboard_post_init_user()` overwrites them on every boot.
-Horizontal scroll on this board is disabled outright (deviation 3).
+Horizontal scroll on this board is disabled outright (deviations 3 and 4).
 
 ## Build & flash
 

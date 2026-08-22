@@ -196,10 +196,10 @@
 #define R_3_H_MOUSE KC_RALT
 #define R_4_H_MOUSE KC_RGUI
 // Bottom Row
-#define L_4_B_MOUSE KC_MS_WH_LEFT
+#define L_4_B_MOUSE XXXXXXX  // upstream: KC_MS_WH_LEFT -- see README deviation 4
 #define L_3_B_MOUSE KC_MS_WH_UP
 #define L_2_B_MOUSE KC_MS_WH_DOWN
-#define L_1_B_MOUSE KC_MS_WH_RIGHT
+#define L_1_B_MOUSE XXXXXXX  // upstream: KC_MS_WH_RIGHT -- see README deviation 4
 #define L_I_B_MOUSE XXXXXXX
 #define R_I_B_MOUSE REDO
 #define R_1_B_MOUSE PASTE
