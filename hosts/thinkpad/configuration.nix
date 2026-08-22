@@ -42,8 +42,10 @@
     address = "10.0.0.3";
     prefixLength = 24;
   }];
-  networking.defaultGateway = "10.0.0.1";
-  networking.nameservers = [ "10.0.0.1" "1.1.1.1" ];
+  # No gateway/DNS on this link: it is a direct run to the box at 10.0.0.2,
+  # not a router. Setting a default route here installs it at metric 0, which
+  # beats WiFi's DHCP route (metric 600) and blackholes all traffic.
+  networking.nameservers = [ "1.1.1.1" ];
 
   # Set your time zone.
   time.timeZone = "America/New_York";
