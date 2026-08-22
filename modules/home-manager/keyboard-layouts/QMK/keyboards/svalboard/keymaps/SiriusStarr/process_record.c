@@ -72,7 +72,7 @@ void keyboard_post_init_user(void) {
 #ifdef SVALBOARD
   global_saved_values.mh_timer_index  = 1;  // Set mousekeys timer to 500 ms.
   global_saved_values.left_scroll     = 1;  // Set left pointer to scroll
-  global_saved_values.right_dpi_index = 5;  // Set right pointer DPI to 1600
+  global_saved_values.right_dpi_index = 3;  // Set right pointer DPI to 800
   global_saved_values.left_dpi_index = 5;   // Set left pointer DPI to 1600
   global_saved_values.auto_mouse = true;    // Enable automouse layer
   // Push the DPI to the sensors: keyboard_post_init_kb() already ran
@@ -83,6 +83,23 @@ void keyboard_post_init_user(void) {
 #endif
 }
 
+
+#ifdef SVALBOARD
+// Left ball is the scroller (left_scroll above) and the only pointer that
+// scrolls by default, so every bit of horizontal scroll in the combined report
+// originates there. Dropping h makes it vertical-only.
+//
+// This is the one seam left: keymap_support.c already defines
+// pointing_device_task_combined_user() and pointing_device_task_user(), but
+// pointing_device_task_combined_kb() is still the weak default in
+// quantum/pointing_device/pointing_device.c, so a strong definition here wins.
+report_mouse_t pointing_device_task_combined_kb(report_mouse_t left_report,
+                                                report_mouse_t right_report) {
+  report_mouse_t r = pointing_device_task_combined_user(left_report, right_report);
+  r.h = 0;
+  return r;
+}
+#endif
 
 bool get_combo_must_tap(uint16_t index, combo_t *combo) {
   // This is taken from https://docs.qmk.fm/features/combo
