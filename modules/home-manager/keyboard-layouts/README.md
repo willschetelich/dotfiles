@@ -72,15 +72,18 @@ vendored — create it once with:
 qmk setup svalboard/vial-qmk -b vial -y
 ```
 
-Then:
+Then flash one side at a time with the helpers `qmk.nix` installs:
 
 ```bash
-qmk flash -kb svalboard/trackball/pmw3389/left  -km SiriusStarr   # plug in left side
-qmk flash -kb svalboard/trackball/pmw3389/right -km SiriusStarr   # plug in right side
+flash-sval-left     # plug in the left half,  double-tap reset when prompted
+flash-sval-right    # plug in the right half, double-tap reset when prompted
 ```
 
-If `qmk flash` hangs (a known NixOS issue), `qmk compile` instead, then double-tap reset,
-mount the `RPI-RP2` volume and copy the `.uf2` across by hand.
+Each one compiles, waits for the RP2040 bootloader to appear as `RPI-RP2`, mounts it via
+udisks2 (no sudo needed), copies the `.uf2` and confirms the board rebooted. They exist
+because `qmk flash` hangs on NixOS; the equivalent by hand is `qmk compile -kb
+svalboard/trackball/pmw3389/<side> -km SiriusStarr`, then mount `RPI-RP2` and copy the
+`.uf2` across yourself.
 
 ## Keylogging
 
