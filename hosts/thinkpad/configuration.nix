@@ -15,16 +15,28 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  # Hibernation. The swap partition lives inside LUKS (unlocked in initrd by the
-  # boot.initrd.luks.devices entry in hardware-configuration.nix), so resume must
-  # name the *mapper* device, not the raw partition.
+  # Hibernation onto the encrypted swap partition (sda3). Two halves, both required:
   #
-  # This line is not optional here. boot.initrd.systemd is on by default, and the
-  # systemd initrd resumes via systemd-hibernate-resume-generator, which acts only
-  # on a `resume=` kernel param -- emitted solely when boot.resumeDevice is set
-  # (nixos/modules/system/boot/systemd/initrd.nix). The classic stage-1 script used
-  # to auto-scan swapDevices for a swsuspend signature; the systemd initrd does
-  # not. Without this, hibernate writes the image and the next boot ignores it.
+  # 1. The swap partition lives inside LUKS, and the resume image can only be read
+  #    once that container is open -- so it must be unlocked in the initrd, not just
+  #    in stage 2. nixos-generate-config emits the mapper path in swapDevices but does
+  #    NOT emit this luks entry (it only walks the device tree for filesystems), so it
+  #    has to be written by hand. It lives here rather than in hardware-configuration.nix
+  #    because that file is generator output: a future nixos-generate-config run would
+  #    drop it, silently, and hibernation would simply stop resuming.
+  #
+  # 2. resume must name the *mapper* device, not the raw partition -- and setting it is
+  #    not optional. boot.initrd.systemd is on by default, and the systemd initrd resumes
+  #    via systemd-hibernate-resume-generator, which acts only on a `resume=` kernel param
+  #    -- emitted solely when boot.resumeDevice is set (nixos/modules/system/boot/systemd/
+  #    initrd.nix). The classic stage-1 script used to auto-scan swapDevices for a swsuspend
+  #    signature; the systemd initrd does not. Without this, hibernate writes the image and
+  #    the next boot ignores it.
+  #
+  # Lid close stays on plain suspend (services.logind, below); hibernate is a deliberate
+  # `systemctl hibernate`.
+  boot.initrd.luks.devices."luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1".device =
+    "/dev/disk/by-uuid/ad7e7b25-5339-4f30-914b-4e8c74e30fd1";
   boot.resumeDevice = "/dev/mapper/luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1";
 
   networking.hostName = "thinkpad"; # Define your hostname.
