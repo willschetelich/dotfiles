@@ -26,6 +26,8 @@
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
+  boot.initrd.luks.devices."luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1".device = "/dev/disk/by-uuid/ad7e7b25-5339-4f30-914b-4e8c74e30fd1";
+
   swapDevices =
     [ { device = "/dev/mapper/luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1"; }
     ];
