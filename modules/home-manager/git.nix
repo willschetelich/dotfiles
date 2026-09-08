@@ -1,7 +1,9 @@
 { config, pkgs, ... }: {
   programs.git = {
     enable = true;
-    userName = "willschetelich";
-    userEmail = "willschetelich@gmail.com";
+    settings.user = {
+      name = "willschetelich";
+      email = "willschetelich@gmail.com";
+    };
   };
 }
