@@ -8,26 +8,26 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "usb_storage" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/mapper/luks-d3f89f95-c0f7-4c38-9ca0-1f05970d8ceb";
+    { device = "/dev/mapper/luks-152181db-47be-49fd-b1bc-ce48fed6e391";
       fsType = "ext4";
     };
 
-  boot.initrd.luks.devices."luks-d3f89f95-c0f7-4c38-9ca0-1f05970d8ceb".device = "/dev/disk/by-uuid/d3f89f95-c0f7-4c38-9ca0-1f05970d8ceb";
+  boot.initrd.luks.devices."luks-152181db-47be-49fd-b1bc-ce48fed6e391".device = "/dev/disk/by-uuid/152181db-47be-49fd-b1bc-ce48fed6e391";
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/B42D-3A29";
+    { device = "/dev/disk/by-uuid/79A1-1DEF";
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
 
   swapDevices =
-    [ { device = "/dev/mapper/luks-79d27c9e-b780-49f4-bf50-f59fc0456258"; }
+    [ { device = "/dev/mapper/luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1"; }
     ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
