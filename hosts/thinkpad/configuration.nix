@@ -35,9 +35,9 @@
   #
   # Lid close stays on plain suspend (services.logind, below); hibernate is a deliberate
   # `systemctl hibernate`.
-  boot.initrd.luks.devices."luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1".device =
-    "/dev/disk/by-uuid/ad7e7b25-5339-4f30-914b-4e8c74e30fd1";
-  boot.resumeDevice = "/dev/mapper/luks-ad7e7b25-5339-4f30-914b-4e8c74e30fd1";
+  boot.initrd.luks.devices."luks-79d27c9e-b780-49f4-bf50-f59fc0456258".device =
+    "/dev/disk/by-uuid/79d27c9e-b780-49f4-bf50-f59fc0456258";
+  boot.resumeDevice = "/dev/mapper/luks-79d27c9e-b780-49f4-bf50-f59fc0456258";
 
   networking.hostName = "thinkpad"; # Define your hostname.
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
