@@ -155,6 +155,16 @@
   # automatic:  boltctl enroll --policy auto <uuid>   (uuid from `boltctl list`).
   services.hardware.bolt.enable = true;
 
+  # Bluetooth (BlueZ) + Blueman GUI/tray for pairing headphones (AirPods etc.).
+  # PipeWire/WirePlumber pick up Bluetooth audio devices automatically.
+  hardware.bluetooth = {
+    enable = true;
+    powerOnBoot = true;
+    # Experimental exposes headset battery level over D-Bus (shown by Blueman).
+    settings.General.Experimental = true;
+  };
+  services.blueman.enable = true;
+
   # Enable CUPS to print documents.
   services.printing.enable = true;
 

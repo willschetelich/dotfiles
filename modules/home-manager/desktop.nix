@@ -15,6 +15,10 @@ in
     };
   };
 
+  # Bluetooth tray icon (shows in Waybar's tray); click to pair/connect.
+  # Needs services.blueman.enable in the NixOS config.
+  services.blueman-applet.enable = true;
+
   # Screen locker: plain dark lock screen.
   programs.swaylock = {
     enable = true;
