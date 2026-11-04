@@ -4,4 +4,6 @@ Specifically, it will have
 - ardour
 - lilypond
 
-It will have the same desktop config as the standard base.nix
+
+
+It will have the same desktop config as the standard base.nix. The thinkpad is kinda the default one right now. 
